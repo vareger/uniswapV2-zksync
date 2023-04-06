@@ -4,7 +4,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { Deployer } from "@matterlabs/hardhat-zksync-deploy";
 
 /**
- * $ yarn hardhat deploy-zksync --script zksync2local/all.ts --network zkSyncLocal
+ * $ yarn hardhat deploy-zksync --script zksync2local/all_fail.ts --network zkSyncLocal
  */
 export default async function (hre: HardhatRuntimeEnvironment) {
     console.log(`Running all testcase scenario`);
@@ -92,8 +92,8 @@ export default async function (hre: HardhatRuntimeEnvironment) {
     console.log("pairBefore: " + pairBefore)
 
     // HERE
-    let txCreatePair = await uniswapV2Router02.createPair(tokenA, tokenB)
-    console.log(txCreatePair)
+    // let txCreatePair = await uniswapV2Router02.createPair(tokenA, tokenB)
+    // console.log(txCreatePair)
     // END HERE
 
     await new Promise(r => setTimeout(r, 2000));
