@@ -55,7 +55,7 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
         // create the pair if it doesn't exist yet
         address pair = IUniswapV2Factory(factory).getPair(tokenA, tokenB);
         if (pair == address(0)) {
-            IUniswapV2Factory(factory).createPair(tokenA, tokenB);
+            pair = IUniswapV2Factory(factory).createPair(tokenA, tokenB);
         }
         (uint reserveA, uint reserveB,) = IUniswapV2Pair(pair).getReserves(); //// UniswapV2Library.getReserves(factory, tokenA, tokenB);
         if (reserveA == 0 && reserveB == 0) {
