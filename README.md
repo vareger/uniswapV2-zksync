@@ -2,6 +2,8 @@
 
 ## ZKSync Testnet Deployment:
 
+| Contract | Address |
+| ----------- | ----------- |
 | WETH | 0x20b28B1e4665FFf290650586ad76E977EAb90c5D |
 | UniswapV2Factory | 0xC2C1E272b884e7a3CE08a035428c7CB1f51cb60e |
 | UniswapV2Router02 | 0x707413d632138E4a123A2BD55DbF9a46827708EB |
