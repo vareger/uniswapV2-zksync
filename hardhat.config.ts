@@ -1,81 +1,50 @@
-import "@matterlabs/hardhat-zksync-deploy";
-import "@matterlabs/hardhat-zksync-solc";
-import * as dotenv from "dotenv";
-dotenv.config();
-import "@matterlabs/hardhat-zksync-verify";
+import '@matterlabs/hardhat-zksync-deploy';
+import '@matterlabs/hardhat-zksync-solc';
+import 'hardhat-abi-exporter';
 
-const {
-  MNEMONIC
-} = process.env
-
+import { infuraApiKey, privateKey, mnemonic, etherscanApiKey, bscnode } from "./network_keys/secrets.json";
 
 module.exports = {
-  env: {
-    MNEMONIC: MNEMONIC
-  },
   zksolc: {
-    version: "1.3.5",
-    compilerSource: "binary",
-    settings: {},
+    version: '1.3.8',
+    compilerSource: 'binary',
+    settings: {
+      optimizer: {
+        enabled: true,
+      }
+    },
   },
-  defaultNetwork: "zkSyncTestnet",
+  zkSyncDeploy: {
+    zkSyncNetwork: 'https://zksync2-testnet.zksync.dev',
+    ethNetwork: 'goerli'
+  },
+
 
   networks: {
-    zkSyncTestnet: {
-      url: "https://zksync2-testnet.zksync.dev",
-      ethNetwork: "goerli", // Can also be the RPC URL of the network (e.g. `https://goerli.infura.io/v3/<API_KEY>`)
-      zksync: true,
-      verifyURL: 'https://zksync2-testnet-explorer.zksync.dev/contract_verification'
+    mainnet:{
+      url: "https://mainnet.infura.io/v3/"+infuraApiKey // The Ethereum Web3 RPC URL (optional).
     },
-    zkSyncLocal: {
-      url: "http://localhost:3050",
-      ethNetwork: "http://localhost:8545",
+    goerli: {
+      url: "https://goerli.infura.io/v3/"+infuraApiKey // The Ethereum Web3 RPC URL (optional).
+    },
+    zkSyncTestnet: {
+      url: "https://testnet.era.zksync.dev", // The testnet RPC URL of zkSync Era network.
+      ethNetwork: "goerli", // The Ethereum Web3 RPC URL, or the identifier of the network (e.g. `mainnet` or `goerli`)
+      zksync: true
+    },
+    zkSyncMainnet: {
+      url: "https://mainnet.era.zksync.io", // The testnet RPC URL of zkSync Era network.
+      ethNetwork: "mainnet", // The Ethereum Web3 RPC URL, or the identifier of the network (e.g. `mainnet` or `goerli`)
       zksync: true
     }
   },
-  etherscan: {
-    apiKey: ""
-  },
   solidity: {
-    compilers: [
-      { 
-        version: "0.8.16", 
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200
-          }
-        }
+    version: '0.8.19',
+    settings: {
+      viaIR: true,
+      optimizer: {
+        enabled: true
       }
-    ]
+    }
   },
 };
-
-// import '@matterlabs/hardhat-zksync-solc';
-// import "@matterlabs/hardhat-zksync-verify";
-
-// export default {
-//     zksolc: {
-//         version: '1.3.5',
-//         compilerSource: 'binary',
-//         settings: {
-//             isSystem: true
-//         }
-//     },
-//     defaultNetwork: "zkTestnet",
-//     networks: {
-//         goerli: {
-//             url: "https://goerli.infura.io/v3/<API_KEY>" // URL of the Ethereum Web3 RPC (optional)
-//         },
-//         zkTestnet: {
-//             url: "https://zksync2-testnet.zksync.dev", // URL of the zkSync network RPC
-//             ethNetwork: "goerli", // URL of the Ethereum Web3 RPC, or the identifier of the network (e.g. `mainnet` or `goerli`)
-//             zksync: true,
-//             // Verification endpoint for Goerli
-//             verifyURL: 'https://zksync2-testnet-explorer.zksync.dev/contract_verification'
-//         },
-//     },
-//     solidity: {
-//         version: '0.8.16'
-//     }
-// };

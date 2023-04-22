@@ -31,11 +31,11 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
         assert(msg.sender == WETH); // only accept ETH via fallback from the WETH contract
     }
 
-    function pairFor(address _factory, address tokenA, address tokenB) external pure returns(address pair) {
-        pair = UniswapV2Library.pairFor(_factory, tokenA, tokenB);
-    }
+    // function pairFor(address _factory, address tokenA, address tokenB) external view returns(address pair) {
+    //     return IUniswapV2Factory(_factory).getPair(tokenA, tokenB);
+    // }
 
-    function getPair(address tokenA, address tokenB) public view returns(address) {
+    function getPair(address tokenA, address tokenB) external view returns(address) {
         return IUniswapV2Factory(factory).getPair(tokenA, tokenB);
     }
 
@@ -57,22 +57,23 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
         if (pair == address(0)) {
             pair = IUniswapV2Factory(factory).createPair(tokenA, tokenB);
         }
-        (uint reserveA, uint reserveB,) = IUniswapV2Pair(pair).getReserves(); //// UniswapV2Library.getReserves(factory, tokenA, tokenB);
+        (uint reserveA, uint reserveB) = UniswapV2Library.getReserves(factory, tokenA, tokenB);
         if (reserveA == 0 && reserveB == 0) {
             (amountA, amountB) = (amountADesired, amountBDesired);
         } else {
-            uint amountBOptimal = amountADesired.mul(reserveB) / reserveA; // UniswapV2Library.quote(amountADesired, reserveA, reserveB);
+            uint amountBOptimal = UniswapV2Library.quote(amountADesired, reserveA, reserveB);
             if (amountBOptimal <= amountBDesired) {
                 require(amountBOptimal >= amountBMin, 'UniswapV2Router: INSUFFICIENT_B_AMOUNT');
                 (amountA, amountB) = (amountADesired, amountBOptimal);
             } else {
-                uint amountAOptimal = amountBDesired.mul(reserveA) / reserveB; //UniswapV2Library.quote(amountBDesired, reserveB, reserveA);
+                uint amountAOptimal = UniswapV2Library.quote(amountBDesired, reserveB, reserveA);
                 assert(amountAOptimal <= amountADesired);
                 require(amountAOptimal >= amountAMin, 'UniswapV2Router: INSUFFICIENT_A_AMOUNT');
                 (amountA, amountB) = (amountAOptimal, amountBDesired);
             }
         }
     }
+
     function addLiquidity(
         address tokenA,
         address tokenB,
@@ -89,6 +90,8 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
         TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
         liquidity = IUniswapV2Pair(pair).mint(to);
     }
+
+
     function addLiquidityETH(
         address token,
         uint amountTokenDesired,
@@ -457,5 +460,13 @@ contract UniswapV2Router02 is IUniswapV2Router02 {
         returns (uint[] memory amounts)
     {
         return UniswapV2Library.getAmountsIn(factory, amountOut, path);
+    }
+
+    function getReserves(address tokenA, address tokenB) 
+        public
+        view
+        virtual
+     returns (uint, uint) {
+        return UniswapV2Library.getReserves(factory, tokenA, tokenB);
     }
 }
