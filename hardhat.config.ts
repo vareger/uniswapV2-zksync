@@ -1,5 +1,6 @@
 import '@matterlabs/hardhat-zksync-deploy';
 import '@matterlabs/hardhat-zksync-solc';
+import '@matterlabs/hardhat-zksync-verify';
 import 'hardhat-abi-exporter';
 
 import { infuraApiKey, privateKey, mnemonic, etherscanApiKey, bscnode } from "./network_keys/secrets.json";
@@ -30,12 +31,16 @@ module.exports = {
     zkSyncTestnet: {
       url: "https://testnet.era.zksync.dev", // The testnet RPC URL of zkSync Era network.
       ethNetwork: "goerli", // The Ethereum Web3 RPC URL, or the identifier of the network (e.g. `mainnet` or `goerli`)
-      zksync: true
+      zksync: true,
+      // Verification endpoint for Goerli
+      verifyURL: "https://zksync2-testnet-explorer.zksync.dev/contract_verification"
     },
     zkSyncMainnet: {
       url: "https://mainnet.era.zksync.io", // The testnet RPC URL of zkSync Era network.
       ethNetwork: "mainnet", // The Ethereum Web3 RPC URL, or the identifier of the network (e.g. `mainnet` or `goerli`)
-      zksync: true
+      zksync: true,
+       // Verification endpoint for Goerli
+       verifyURL: "https://zksync2-mainnet-explorer.zksync.io/contract_verification"
     }
   },
   solidity: {
